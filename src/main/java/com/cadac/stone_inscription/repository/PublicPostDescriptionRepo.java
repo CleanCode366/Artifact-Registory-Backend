@@ -13,7 +13,7 @@ public interface PublicPostDescriptionRepo extends MongoRepository<PublicPostDes
 
     List<PublicPostDescription> findByPostId(ObjectId postId);
 
-    void deleteAllByPostId(String postId);
+    void deleteAllByPostId(ObjectId postId);
 
     List<PublicPostDescription> findAllByUserId(ObjectId id);
 

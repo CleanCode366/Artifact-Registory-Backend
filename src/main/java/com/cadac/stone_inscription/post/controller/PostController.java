@@ -315,6 +315,21 @@ public class PostController {
     //     return postService.deleteImagesFromPost(email, postId, deletedImageIds);
     // }
 
+    // @PostMapping("/test/addPoastDiscription/{email}")
+    // public ResponseEntity<?> addPoastDiscriptionForTest(
+    //         @PathVariable String email,
+    //         @RequestParam String postId,
+    //         @RequestParam String discription) {
+
+    //     return postService.addPoastDiscription(email, postId, discription);
+    // }
+
+    // @PostMapping("/test/getPostDiscription")
+    // public ResponseEntity<?> getPostDiscriptionForTest(@RequestParam String postId) {
+
+    //     return postService.getPostDiscription(postId);
+    // }
+
     // @PostMapping("/test/postDelete/{email}")
     // public ResponseEntity<?> postDeleteForTest(
     //         @PathVariable String email,
