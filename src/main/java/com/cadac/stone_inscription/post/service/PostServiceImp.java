@@ -325,7 +325,8 @@ public class PostServiceImp implements PostService {
     public ResponseEntity<?> postDelete(String usernameFromToken, String postId) {
         User user = userRepository.findByEmail(usernameFromToken);
 
-        Optional<InscriptionPost> postDelete = inscriptionPostRepo.findById(new ObjectId(postId));
+        ObjectId objectId = new ObjectId(postId);
+        Optional<InscriptionPost> postDelete = inscriptionPostRepo.findById(objectId);
 
         if (postDelete.isEmpty()) {
             throw new StoneInscriptionException("Unprocesable request", HttpStatus.BAD_REQUEST);
@@ -338,8 +339,8 @@ public class PostServiceImp implements PostService {
         adjustUserImagesUploaded(user, -deletedImageCount);
         userRepository.save(user);
 
-        publicPostDescriptionRepo.deleteAllByPostId(postId);
-        inscriptionPostRepo.deleteById(new ObjectId(postId));
+        publicPostDescriptionRepo.deleteAllByPostId(objectId);
+        inscriptionPostRepo.deleteById(objectId);
         return UserResponse.responseHandler("post deleted", HttpStatus.OK, true);
     }
 
