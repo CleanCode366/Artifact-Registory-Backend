@@ -118,7 +118,13 @@ app:
     failure-url: /api/v1/fail
     login-page: /api/v1/noauth/check
     default-provider: google  # Default OAuth provider when none specified
-    
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: strict
+
 management:
   server:
     port: 8081          # move actuator to separate port
