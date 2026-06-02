@@ -13,13 +13,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,7 +28,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cadac.stone_inscription.auth.CustomOAuth2SuccessHandler;
 import com.cadac.stone_inscription.auth.JwtAuthenticationEntryPoint;
 import com.cadac.stone_inscription.auth.JwtRequestFilter;
-import com.cadac.stone_inscription.exception.ExceptionHandlerFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -42,9 +41,6 @@ public class StoneinscriptionConfiguration implements WebMvcConfigurer {
         private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
         @Autowired
         private UserDetailsService StoneInscriptionUserDetailsService;
-
-        @Autowired
-        private ExceptionHandlerFilter exceptionHandlerFilter;
 
         @Value("${app.cors.url}")
         private String corsUrl;
@@ -95,8 +91,9 @@ public class StoneinscriptionConfiguration implements WebMvcConfigurer {
                 http
                             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                                // ✅ Disable CSRF completely for JWT stateless API
-                                .csrf(AbstractHttpConfigurer::disable)
+                                .csrf(csrf -> csrf
+                                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                                        .ignoringRequestMatchers("/oauth2/**"))
 
                                 .authorizeHttpRequests(authz -> authz
                                                 .requestMatchers("/api/v1/noauth/**", "/post/public/**").permitAll()

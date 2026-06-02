@@ -1,5 +1,15 @@
 # Cookie Security Policy
 
+## session cookie
+
+- Cookie names: `JSESSIONID` / `SESSION`
+- `SameSite=Strict` is configured for the session cookie.
+- `Secure=true` should be used in production.
+- Reason: the OAuth callback flow uses the `refreshToken` cookie, not the session cookie, so `Strict` is safe and provides stronger CSRF protection.
+- Additional protections:
+  - CSRF is enabled for state-changing requests using `CookieCsrfTokenRepository.withHttpOnlyFalse()`.
+  - OAuth flow endpoints under `/oauth2/**` are exempted from CSRF because they participate in the OAuth redirect dance.
+
 ## refreshToken cookie
 
 - Cookie name: `refreshToken`
