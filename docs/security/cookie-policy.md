@@ -10,6 +10,14 @@
   - CSRF is enabled for state-changing requests using `CookieCsrfTokenRepository.withHttpOnlyFalse()`.
   - OAuth flow endpoints under `/oauth2/**` are exempted from CSRF because they participate in the OAuth redirect dance.
 
+### Production requirements
+
+- `Secure=true` — session cookie is only sent over HTTPS.
+- `HttpOnly=true` — JavaScript cannot read the cookie.
+- `max-age=3600` — 1 hour session lifetime recommended.
+- `name=SESSION` — session cookie renamed to reduce fingerprinting.
+- HTTPS enforcement: the server redirects HTTP to HTTPS (Spring Security `requiresChannel`), ensuring the `Secure` flag is meaningful.
+
 ## refreshToken cookie
 
 - Cookie name: `refreshToken`

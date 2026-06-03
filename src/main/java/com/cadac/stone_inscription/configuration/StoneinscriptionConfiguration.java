@@ -84,16 +84,20 @@ public class StoneinscriptionConfiguration implements WebMvcConfigurer {
                 return authenticationManagerBuilder.build();
         }
 
+        @SuppressWarnings("deprecation")
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http,
                         CustomOAuth2SuccessHandler successHandler) throws Exception {
 
-                http
-                            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                http
+                                                        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                                .csrf(csrf -> csrf
-                                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                                        .ignoringRequestMatchers("/oauth2/**"))
+                                                                // Require HTTPS for all requests (redirect HTTP -> HTTPS)
+                                                                .requiresChannel(channel -> channel.anyRequest().requiresSecure())
+
+                                                                .csrf(csrf -> csrf
+                                                                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                                                                                .ignoringRequestMatchers("/oauth2/**"))
 
                                 .authorizeHttpRequests(authz -> authz
                                                 .requestMatchers("/api/v1/noauth/**", "/post/public/**").permitAll()

@@ -123,7 +123,11 @@ server:
   servlet:
     session:
       cookie:
-        same-site: strict
+        secure: true        # Only transmit over HTTPS
+        http-only: true     # Prevent JavaScript access (defence in depth)
+        same-site: strict   # See SH-07 for full SameSite discussion
+        max-age: 3600       # 1 hour session lifetime
+        name: SESSION       # Rename from JSESSIONID to reduce fingerprinting
 
 management:
   server:
